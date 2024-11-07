@@ -1,6 +1,6 @@
 package com.vcentry.testcase;
 
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -12,19 +12,31 @@ public class LoginTest extends BaseClass {
 
 	LoginPage login;
 
-	@BeforeClass
+	
+	@BeforeMethod
 	public void launchUrl() {
 		driver.get(Function.getProp("loginurl"));
 		login = new LoginPage();
+		
 	}
 
-	@Test(dataProvider = "ValidLogin")
+	@Test(dataProvider = "ValidLogin",priority = 1)
 	public void LoginWithValidCredentials(String uName, String pwd, String expectedResult) {
 
 		login.enterUsername(uName);
 		login.enterPassword(pwd);
 		login.clickLoginBtn();
 		login.verifyHomePage(expectedResult);
+
+	}
+	
+	@Test(dataProvider = "InvalidLogin",priority=2)
+	public void LoginWithInvalidCredentials(String uName, String pwd, String expectedResult) {
+
+		login.enterUsername(uName);
+		login.enterPassword(pwd);
+		login.clickLoginBtn();
+		login.verifyError(expectedResult);
 
 	}
 
@@ -35,15 +47,7 @@ public class LoginTest extends BaseClass {
 		return Function.getTestData("login", "ValidCredentials");
 	}
 
-	@Test(dataProvider = "InvalidLogin")
-	public void LoginWithInvalidCredentials(String uName, String pwd, String expectedResult) {
-
-		login.enterUsername(uName);
-		login.enterPassword(pwd);
-		login.clickLoginBtn();
-		login.verifyHomePage(expectedResult);
-
-	}
+	
 
 	@DataProvider(name = "InvalidLogin")
 
