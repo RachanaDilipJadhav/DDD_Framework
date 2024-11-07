@@ -30,6 +30,7 @@ public class FormTest extends BaseClass{
 	form.selectPayment(payment);
 	form.placeorder();
 	form.verifyOrderPlaced(msg);
+	System.out.println("msg");
 	
 	}
 	
